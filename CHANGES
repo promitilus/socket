@@ -17,3 +17,5 @@ User-visible changes in Socket version 1.1:
     message
 
   - slightly more adequate signal handling and messages
+
+  - support of UNIX domain sockets

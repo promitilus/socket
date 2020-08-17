@@ -8,13 +8,13 @@
 ### socket.1 in /usr/local/man/man1/socket.1
 ### Make sure the target directories exist before doing a "make install".
 
-INSTALLBASE = /usr/local
+INSTALLBASE = $(DESTDIR)/usr
 INSTALLBINPATH = $(INSTALLBASE)/bin
 INSTALLBINMODE = 755
 INSTALLMANPATH = $(INSTALLBASE)/man
-INSTALLMANMODE = 444
+INSTALLMANMODE = 644
 CC = cc
-CFLAGS  = $(SWITCHES) -O
+CFLAGS  = $(SWITCHES) -O2
 LDFLAGS = $(SWITCHES) -s
 
 ### You may need to uncomment some lines below for your operating
@@ -78,7 +78,7 @@ tags: TAGS
 TAGS: $(PROGSOURCES) $(HEADERS)
 	etags $(PROGSOURCES) $(HEADERS)
 
-installtargets: $(INSTALLBINPATH)/$(TARGET) installmanuals
+installtargets: $(INSTALLBINPATH)/$(TARGET)
 
 $(INSTALLBINPATH)/$(TARGET): $(TARGET)
 	@-echo "installing $(TARGET) in $(INSTALLBINPATH)"; \

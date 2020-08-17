@@ -7,7 +7,7 @@ Please read the file COPYRIGHT for further details.
 ..
 .TH SOCKET 1 "Aug  6, 1992"
 .SH NAME
-socket \- create tcp socket and connect to stdin/out
+socket \- create a TCP or a UNIX domain socket and connect to stdin/out
 .SH SYNOPSIS
 .B socket
 [
@@ -17,7 +17,39 @@ socket \- create tcp socket and connect to stdin/out
 .B \-p
 .I command
 ]
+[
+.B \-B
+.I local address
+]
 .I host port
+.br
+.B socket
+[
+.B \-bcfqrvw
+]
+[
+.B \-p
+.I command
+]
+.I /path
+.br
+.B socket
+[
+.B \-bcfqrvw
+]
+[
+.B \-p
+.I command
+]
+[
+.B \-B
+.I local address
+]
+.B \-s 
+[
+.B \-l
+]
+.I port
 .br
 .B socket
 [
@@ -31,10 +63,10 @@ socket \- create tcp socket and connect to stdin/out
 [
 .B \-l
 ]
-.I port
+.I /path
 .SH DESCRIPTION
 .B Socket
-creates an Internet domain TCP socket and connects it to stdin and stdout.
+creates an Internet domain TCP or a UNIX domain stream socket and connects it to stdin and stdout.
 The 
 .I host
 argument can be an Internet number in dot-notation (like
@@ -46,12 +78,26 @@ The
 argument can be a port number or a service name which can be mapped to
 a port number by
 .IR getservbyname (3).
+If an UNIX domain socket is wanted to be created instead of an Internet
+socket, specify the 
+.I path
+instead of an internet (canonical domain named or dot-notated) host.
+The hostname is treated as a pathname if contains at least a single 
+slash. I.e. if one wants to create or connect to a socket in the current 
+directory, use 
+.I ./filename
+to specify the connection point.
 .SH OPTIONS
 .TP
 .BR "\-b " (background)
 The program forks itself into the background, detaches from its
 controlling tty, closes the file descriptors associated with the tty,
 and changes its current directory to the root directory.
+.TP
+.BR "\-B " "(local address)"
+This option specifies which
+.I local address
+to binded to when making a connection.
 .TP
 .BR "\-c " (crlf)
 Linefeed characters (LF) are converted to a Carriage Return Linefeed
@@ -87,7 +133,8 @@ No data is read from standard input and written to the socket.
 A server socket is created.
 A
 .I hostname 
-argument is not required.
+argument is not required of Internet sockets, only the port number 
+but a pathname is required for UNIX domain sockets.
 .TP
 .BR "\-v " (verbose)
 Messages about connections etc. are issued to stderr.
@@ -143,8 +190,12 @@ A non-zero exit code is returned if
 .B socket
 terminates due to an error condition or a signal.
 .SH SEE ALSO
+.BR ip (7),
+.BR tcp (7),
+.BR unix (7),
 .BR accept (2),
 .BR bind (2),
+.BR listen (2), 
 .BR connect (2), 
 .BR socket (2),
 .BR gethostbyname (3),

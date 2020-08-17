@@ -9,7 +9,7 @@ this program is licensed to you.
 
 What is it?
 
-The program Socket implements access to TCP sockets from shell level.
+The program Socket implements access to TCP or UNIX sockets from shell level.
 First written for the need to open a server socket and read and write
 to the socket interactively for testing purposes, it quickly evolved
 into a generic tool providing the socket interface for shell script
@@ -19,7 +19,8 @@ and interactive use.
 Client mode
 
 In client mode (which is the default) it connects to a given port at a
-given host.  Data read from the socket is written to stdout, data read
+given host or to a given UNIX domain socket specified by a pathname on the
+local filesystem(s). Data read from the socket is written to stdout, data read
 from stdin is written to the socket.  When the peer closes the
 connection or a signal is received, the program terminates.  An
 example for this is the following command:
@@ -35,7 +36,8 @@ server, any output from the server is written to the user's terminal.
 Server mode
 
 In server mode (indicated by the "-s" command line switch) it binds a
-server socket to the given port on the local host and accepts a
+server socket to the given port on the local host (INET sockets)
+or a given pathname on the local filesystem (UNIX sockets) and accepts a
 connection.  When a client connects to this socket, all data read from
 the socket is written to stdout, data read from stdin is written to
 the socket.  For example, the command

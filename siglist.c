@@ -23,6 +23,9 @@ Foundation, 675 Mass Ave, Cambridge, MA 02139, USA. */
 
 #include <stdio.h>
 #include <signal.h>
+#include <stdlib.h>
+#include <string.h>
+#include <memory.h>
 
 #if !defined (NSIG)
 #  if defined (_NSIG)
@@ -32,37 +35,37 @@ Foundation, 675 Mass Ave, Cambridge, MA 02139, USA. */
 #  endif /* !_NSIG */
 #endif /* !NSIG */
 
-char *sys_siglist[NSIG];
+char *socket_siglist[NSIG];
 
-extern *malloc ();
+/* extern *malloc (); */	/* see stdlib.h and/or malloc.h, by apal@szofi */
 
-initialize_siglist ()
+void initialize_siglist ()
 {
   register int i;
 
   for (i = 0; i < NSIG; i++)
-    sys_siglist[i] = (char *)0x0;
+    socket_siglist[i] = (char *)0x0;
 
-  sys_siglist[0] = "Bogus signal";
+  socket_siglist[0] = "Bogus signal";
 
 #if defined (SIGHUP)
-  sys_siglist[SIGHUP] = "Hangup signal";
+  socket_siglist[SIGHUP] = "Hangup signal";
 #endif
 
 #if defined (SIGINT)
-  sys_siglist[SIGINT] = "Interrupt";
+  socket_siglist[SIGINT] = "Interrupt";
 #endif
 
 #if defined (SIGQUIT)
-  sys_siglist[SIGQUIT] = "Quit signal";
+  socket_siglist[SIGQUIT] = "Quit signal";
 #endif
 
 #if defined (SIGILL)
-  sys_siglist[SIGILL] = "Illegal instruction";
+  socket_siglist[SIGILL] = "Illegal instruction";
 #endif
 
 #if defined (SIGTRAP)
-  sys_siglist[SIGTRAP] = "BPT trace/trap";
+  socket_siglist[SIGTRAP] = "BPT trace/trap";
 #endif
 
 #if defined (SIGIOT) && !defined (SIGABRT)
@@ -70,59 +73,59 @@ initialize_siglist ()
 #endif
 
 #if defined (SIGABRT)
-  sys_siglist[SIGABRT] = "ABORT instruction";
+  socket_siglist[SIGABRT] = "ABORT instruction";
 #endif
 
 #if defined (SIGEMT)
-  sys_siglist[SIGEMT] = "EMT instruction";
+  socket_siglist[SIGEMT] = "EMT instruction";
 #endif
 
 #if defined (SIGFPE)
-  sys_siglist[SIGFPE] = "Floating point exception";
+  socket_siglist[SIGFPE] = "Floating point exception";
 #endif
 
 #if defined (SIGKILL)
-  sys_siglist[SIGKILL] = "Kill signal";
+  socket_siglist[SIGKILL] = "Kill signal";
 #endif
 
 #if defined (SIGBUS)
-  sys_siglist[SIGBUS] = "Bus error";
+  socket_siglist[SIGBUS] = "Bus error";
 #endif
 
 #if defined (SIGSEGV)
-  sys_siglist[SIGSEGV] = "Segmentation fault";
+  socket_siglist[SIGSEGV] = "Segmentation fault";
 #endif
 
 #if defined (SIGSYS)
-  sys_siglist[SIGSYS] = "Bad system call";
+  socket_siglist[SIGSYS] = "Bad system call";
 #endif
 
 #if defined (SIGPIPE)
-  sys_siglist[SIGPIPE] = "Broken pipe condition";
+  socket_siglist[SIGPIPE] = "Broken pipe condition";
 #endif
 
 #if defined (SIGALRM)
-  sys_siglist[SIGALRM] = "Alarm clock signal";
+  socket_siglist[SIGALRM] = "Alarm clock signal";
 #endif
 
 #if defined (SIGTERM)
-  sys_siglist[SIGTERM] = "Termination signal";
+  socket_siglist[SIGTERM] = "Termination signal";
 #endif
 
 #if defined (SIGURG)
-  sys_siglist[SIGURG] = "Urgent IO condition";
+  socket_siglist[SIGURG] = "Urgent IO condition";
 #endif
 
 #if defined (SIGSTOP)
-  sys_siglist[SIGSTOP] = "Stop signal";
+  socket_siglist[SIGSTOP] = "Stop signal";
 #endif
 
 #if defined (SIGTSTP)
-  sys_siglist[SIGTSTP] = "Stopped";
+  socket_siglist[SIGTSTP] = "Stopped";
 #endif
 
 #if defined (SIGCONT)
-  sys_siglist[SIGCONT] = "Continue signal";
+  socket_siglist[SIGCONT] = "Continue signal";
 #endif
 
 #if !defined (SIGCHLD) && defined (SIGCLD)
@@ -130,93 +133,93 @@ initialize_siglist ()
 #endif
 
 #if defined (SIGCHLD)
-  sys_siglist[SIGCHLD] = "Child signal";
+  socket_siglist[SIGCHLD] = "Child signal";
 #endif
 
 #if defined (SIGTTIN)
-  sys_siglist[SIGTTIN] = "Stop (tty input) signal";
+  socket_siglist[SIGTTIN] = "Stop (tty input) signal";
 #endif
 
 #if defined (SIGTTOU)
-  sys_siglist[SIGTTOU] = "Stop (tty output) signal";
+  socket_siglist[SIGTTOU] = "Stop (tty output) signal";
 #endif
 
 #if defined (SIGIO)
-  sys_siglist[SIGIO] = "I/O ready signal";
+  socket_siglist[SIGIO] = "I/O ready signal";
 #endif
 
 #if defined (SIGXCPU)
-  sys_siglist[SIGXCPU] = "CPU limit exceeded";
+  socket_siglist[SIGXCPU] = "CPU limit exceeded";
 #endif
 
 #if defined (SIGXFSZ)
-  sys_siglist[SIGXFSZ] = "File limit exceeded";
+  socket_siglist[SIGXFSZ] = "File limit exceeded";
 #endif
 
 #if defined (SIGVTALRM)
-  sys_siglist[SIGVTALRM] = "Alarm (virtual)";
+  socket_siglist[SIGVTALRM] = "Alarm (virtual)";
 #endif
 
 #if defined (SIGPROF)
-  sys_siglist[SIGPROF] = "Alarm (profile)";
+  socket_siglist[SIGPROF] = "Alarm (profile)";
 #endif
 
 #if defined (SIGWINCH)
-  sys_siglist[SIGWINCH] = "Window change";
+  socket_siglist[SIGWINCH] = "Window change";
 #endif
 
 #if defined (SIGLOST)
-  sys_siglist[SIGLOST] = "Record lock signal";
+  socket_siglist[SIGLOST] = "Record lock signal";
 #endif
 
 #if defined (SIGUSR1)
-  sys_siglist[SIGUSR1] = "User signal 1";
+  socket_siglist[SIGUSR1] = "User signal 1";
 #endif
 
 #if defined (SIGUSR2)
-  sys_siglist[SIGUSR2] = "User signal 2";
+  socket_siglist[SIGUSR2] = "User signal 2";
 #endif
 
 #if defined (SIGMSG)
-  sys_siglist[SIGMSG] = "HFT input data pending signal";
+  socket_siglist[SIGMSG] = "HFT input data pending signal";
 #endif 
 
 #if defined (SIGPWR)
-  sys_siglist[SIGPWR] = "power failure imminent signal";
+  socket_siglist[SIGPWR] = "power failure imminent signal";
 #endif 
 
 #if defined (SIGDANGER)
-  sys_siglist[SIGDANGER] = "system crash imminent signal";
+  socket_siglist[SIGDANGER] = "system crash imminent signal";
 #endif 
 
 #if defined (SIGMIGRATE)
-  sys_siglist[SIGMIGRATE] = "Process migration";
+  socket_siglist[SIGMIGRATE] = "Process migration";
 #endif 
 
 #if defined (SIGPRE)
-  sys_siglist[SIGPRE] = "Programming error signal";
+  socket_siglist[SIGPRE] = "Programming error signal";
 #endif 
 
 #if defined (SIGGRANT)
-  sys_siglist[SIGGRANT] = "HFT monitor mode granted signal";
+  socket_siglist[SIGGRANT] = "HFT monitor mode granted signal";
 #endif 
 
 #if defined (SIGRETRACT)
-  sys_siglist[SIGRETRACT] = "HFT monitor mode retracted signal";
+  socket_siglist[SIGRETRACT] = "HFT monitor mode retracted signal";
 #endif 
 
 #if defined (SIGSOUND)
-  sys_siglist[SIGSOUND] = "HFT sound sequence has completed signal";
+  socket_siglist[SIGSOUND] = "HFT sound sequence has completed signal";
 #endif 
 
   for (i = 0; i < NSIG; i++)
     {
-      if (!sys_siglist[i])
+      if (!socket_siglist[i])
 	{
-	  sys_siglist[i] =
+	  socket_siglist[i] =
 	    (char *) malloc (10 + strlen ("Unknown Signal #"));
 
-	  sprintf (sys_siglist[i], "Unknown Signal #%d", i);
+	  sprintf (socket_siglist[i], "Unknown Signal #%d", i);
 	}
     }
 }

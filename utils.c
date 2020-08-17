@@ -15,6 +15,10 @@ Please read the file COPYRIGHT for further details.
 #endif
 
 #include <stdio.h>
+#ifdef __linux__
+#include <unistd.h>
+#endif
+#include <stdlib.h>
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/time.h>
@@ -33,7 +37,7 @@ SIG_HANDLER_RET exitsig(sig)
 int sig ;
 {
     if (sig != SIGUSR1) {
-	fprintf(stderr, "\n%s occured, exiting\n", sys_siglist[sig]) ;
+	fprintf(stderr, "\n%s occured, exiting\n", socket_siglist[sig]) ;
     }
     exit(-sig) ;
 }
@@ -42,7 +46,7 @@ int sig ;
 void usage()
 {
     static char ustring[] =
-	"Usage: %s [-bclqrvw] [-p prog] [-s | host] port\n" ;
+	"Usage: %s [-bclqrvw] [-B local ip] [-p prog] {{-s|host} port | [-s] /path}\n" ;
 
     fprintf(stderr, ustring, progname) ;
 }
@@ -70,10 +74,10 @@ char *s ;
 
 /* set up signal handling. All except TSTP, CONT, CLD, and QUIT
  * are caught with exitsig(). */
-init_signals()
+void init_signals()
 {
     int i ;
-#ifdef SIG_SETMASK		/* only with BSD signals */
+#ifdef BSD_SIG_SETMASK		/* only with BSD signals */
     static struct sigvec svec = { exitsig, ~0, 0 } ;
 #endif
 
@@ -103,7 +107,7 @@ init_signals()
 	  case SIGQUIT:		/* if the user wants a core dump, */
 	    continue ;		/* they can have it. */
 	  default:	    
-#ifdef SIG_SETMASK
+#ifdef BSD_SIG_SETMASK
 	    sigvec(i, &svec, NULL) ;
 #else
 	    signal(i, exitsig) ;

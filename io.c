@@ -9,6 +9,11 @@ Please read the file COPYRIGHT for further details.
 
 #define _BSD			/* AIX *loves* this */
 
+#ifdef __linux__
+#include <unistd.h>
+#include <string.h>
+#endif
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #ifdef ISC
@@ -70,11 +75,13 @@ int size, to ;
 	} else {
 	    strip_crs(buffer, buffer2, &size) ;
 	}
-    } else {
-	bcopy(buffer, buffer2, size) ;
+    // debfix } else {
+	// debfix bcopy(buffer, buffer2, size) ;
+	buffer = buffer2 ;
     }
     while (size > 0) {
-	written = write(to, buffer2, size) ;
+	// written = write(to, buffer2, size) ;
+	written = write(to, buffer, size) ;
 	if (written == -1) {
 	    /* this should not happen */
 	    perror2("write") ;
@@ -84,13 +91,14 @@ int size, to ;
 	    return -1 ;
 	}
 	size -= written ;
+	buffer += written ;
     }
     return 1 ;
 }
 
 /* all IO to and from the socket is handled here. The main part is
  * a loop around select(2). */
-do_io()
+void do_io()
 {
     fd_set readfds ;
     int fdset_width ;
